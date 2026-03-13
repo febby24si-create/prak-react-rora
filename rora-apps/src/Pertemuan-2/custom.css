@@ -1,0 +1,103 @@
+/* Styling untuk keseluruhan halaman */
+
+body {
+    font-family: 'Noto Serif SC', 'SimSun', serif;
+    margin: 0;
+    padding: 30px;
+    color: #f5f5f5;
+
+    /* Background: Merah Marun Tua dengan Pola Tekstur Sutra */
+    background-color: #4a0404;
+    background-image: 
+        /* Efek Butiran Salju Terus Jatuh */
+        radial-gradient(circle at 10% 10%, white 1.5px, transparent 1.5px),
+        radial-gradient(circle at 30% 50%, white 1px, transparent 1px),
+        radial-gradient(circle at 70% 20%, white 2px, transparent 2px),
+        /* Pola Geometris Oriental (Kain Sutra) */
+        linear-gradient(30deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
+        linear-gradient(150deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
+        linear-gradient(30deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
+        linear-gradient(150deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
+        linear-gradient(60deg, #6b0606 25%, transparent 25.5%, transparent 75%, #6b0606 75.5%, #6b0606),
+        linear-gradient(60deg, #6b0606 25%, transparent 25.5%, transparent 75%, #6b0606 75.5%, #6b0606);
+    
+    background-size: 200px 200px, 150px 150px, 250px 250px, 80px 140px, 80px 140px, 80px 140px, 80px 140px, 80px 140px, 80px 140px;
+    background-attachment: scroll;
+    
+    /* Animasi Salju */
+    animation: snowFall 20s linear infinite;
+}
+
+@keyframes snowFall {
+    0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    100% { background-position: 400px 400px, 300px 600px, 500px 200px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+}
+
+/* Container utama (Card) */
+.card {
+    max-width: 600px;
+    margin: 40px auto;
+    background: rgba(139, 0, 0, 0.9); /* Merah khas gerbang terlarang */
+    padding: 40px;
+    border-radius: 4px; /* Sudut lebih tegas agar terlihat formal */
+    
+    /* Border Ganda: Mewakili arsitektur kayu China */
+    border: 4px double #d4af37; 
+    outline: 2px solid #8b0000;
+    outline-offset: -10px;
+
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    position: relative;
+}
+
+/* Ornamen Lampion di pojok atas */
+.card::after {
+    content: "🏮";
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    font-size: 40px;
+    filter: drop-shadow(0 0 10px #ff0000);
+}
+
+/* Header utama */
+h1 {
+    color: #ffd700;
+    text-align: center;
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ffd700;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+/* Paragraf */
+p {
+    font-size: 17px;
+    line-height: 1.9;
+    color: #fff5cc;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    border-left: 3px solid #d4af37; /* Seperti gulungan kertas (scroll) */
+    padding-left: 20px;
+}
+
+/* Garis pemisah dengan ornamen tengah */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #d4af37, transparent);
+    margin: 25px 0;
+    position: relative;
+}
+
+/* Greeting */
+small {
+    display: block;
+    font-style: italic;
+    text-align: center;
+    color: #e5e4e2; /* Warna perak salju */
+    margin-top: 30px;
+    font-size: 14px;
+}
