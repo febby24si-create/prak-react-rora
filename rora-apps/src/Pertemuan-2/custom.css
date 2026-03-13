@@ -1,103 +1,145 @@
-/* Styling untuk keseluruhan halaman */
-
+/* Styling Keseluruhan */
 body {
     font-family: 'Noto Serif SC', 'SimSun', serif;
     margin: 0;
-    padding: 30px;
+    padding: 80px 20px;
     color: #f5f5f5;
+    background-color: #2a0000;
 
-    /* Background: Merah Marun Tua dengan Pola Tekstur Sutra */
-    background-color: #4a0404;
+    /* Layer Background: Kembang Api + Salju + Awan */
     background-image: 
-        /* Efek Butiran Salju Terus Jatuh */
-        radial-gradient(circle at 10% 10%, white 1.5px, transparent 1.5px),
-        radial-gradient(circle at 30% 50%, white 1px, transparent 1px),
-        radial-gradient(circle at 70% 20%, white 2px, transparent 2px),
-        /* Pola Geometris Oriental (Kain Sutra) */
-        linear-gradient(30deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
-        linear-gradient(150deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
-        linear-gradient(30deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
-        linear-gradient(150deg, #5c0505 12%, transparent 12.5%, transparent 87%, #5c0505 87.5%, #5c0505),
-        linear-gradient(60deg, #6b0606 25%, transparent 25.5%, transparent 75%, #6b0606 75.5%, #6b0606),
-        linear-gradient(60deg, #6b0606 25%, transparent 25.5%, transparent 75%, #6b0606 75.5%, #6b0606);
-    
-    background-size: 200px 200px, 150px 150px, 250px 250px, 80px 140px, 80px 140px, 80px 140px, 80px 140px, 80px 140px, 80px 140px;
-    background-attachment: scroll;
-    
-    /* Animasi Salju */
-    animation: snowFall 20s linear infinite;
+        /* Salju (Layer Depan) */
+        radial-gradient(circle at 20% 30%, white 1.5px, transparent 1.5px),
+        radial-gradient(circle at 70% 60%, white 2px, transparent 2px),
+        /* Kembang Api (Efek Kilau) */
+        radial-gradient(circle at 10% 10%, rgba(255,215,0,0.2) 0%, transparent 50%),
+        radial-gradient(circle at 90% 15%, rgba(255,69,0,0.2) 0%, transparent 50%),
+        /* Pola Awan Tradisional */
+        radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03) 20px, transparent 21px),
+        /* Warna Dasar Malam Musim Dingin */
+        linear-gradient(180deg, #1a0000 0%, #4a0000 100%);
+
+    background-size: 200px 200px, 300px 300px, 100% 100%, 100% 100%, 60px 60px, 100% 100%;
+    background-attachment: fixed;
+    animation: snowFall 12s linear infinite, fireworks 5s ease-in-out infinite alternate;
 }
 
 @keyframes snowFall {
-    0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
-    100% { background-position: 400px 400px, 300px 600px, 500px 200px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    100% { background-position: 200px 400px, 300px 600px, 0 0, 0 0, 0 0, 0 0; }
 }
 
-/* Container utama (Card) */
+@keyframes fireworks {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; filter: brightness(1.2); }
+}
+
+/* Container Utama dengan Bentuk Atap Pagoda */
 .card {
     max-width: 600px;
     margin: 40px auto;
-    background: rgba(139, 0, 0, 0.9); /* Merah khas gerbang terlarang */
-    padding: 40px;
-    border-radius: 4px; /* Sudut lebih tegas agar terlihat formal */
-    
-    /* Border Ganda: Mewakili arsitektur kayu China */
-    border: 4px double #d4af37; 
-    outline: 2px solid #8b0000;
-    outline-offset: -10px;
-
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    background: linear-gradient(145deg, #8b0000, #600000);
+    padding: 45px;
     position: relative;
+    border: 4px solid #d4af37;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
 }
 
-/* Ornamen Lampion di pojok atas */
-.card::after {
-    content: "🏮";
+/* Ornamen Atap Pagoda di Atas Card */
+.card::before {
+    content: "";
     position: absolute;
-    top: -20px;
-    left: 20px;
-    font-size: 40px;
-    filter: drop-shadow(0 0 10px #ff0000);
+    top: -30px;
+    left: -20px;
+    right: -20px;
+    height: 40px;
+    background: #d4af37;
+    /* Membuat siluet atap melengkung */
+    clip-path: polygon(10% 100%, 0% 0%, 20% 70%, 80% 70%, 100% 0%, 90% 100%);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.5);
 }
 
-/* Header utama */
+/* Lampion Berayun */
+.card::after {
+    content: "🏮          🏮";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 55px;
+    word-spacing: 480px;
+    filter: drop-shadow(0 0 20px #ff4500);
+    animation: swing 3s ease-in-out infinite;
+    z-index: 10;
+}
+
+@keyframes swing {
+    0%, 100% { transform: rotate(-8deg); transform-origin: top; }
+    50% { transform: rotate(8deg); transform-origin: top; }
+}
+
+/* Header Utama */
 h1 {
     color: #ffd700;
     text-align: center;
-    font-weight: 900;
-    letter-spacing: 6px;
-    text-transform: uppercase;
+    font-size: 2.8em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(255,215,0,0.5);
+    font-weight: bold;
     border-bottom: 2px solid #ffd700;
-    display: inline-block;
-    width: 100%;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 
-/* Paragraf */
+/* Paragraf - Efek Kertas Sutra Klasik */
 p {
-    font-size: 17px;
-    line-height: 1.9;
+    font-size: 18px;
+    line-height: 2.2;
     color: #fff5cc;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    border-left: 3px solid #d4af37; /* Seperti gulungan kertas (scroll) */
-    padding-left: 20px;
-}
-
-/* Garis pemisah dengan ornamen tengah */
-hr {
-    border: none;
-    height: 2px;
-    background: linear-gradient(to right, transparent, #d4af37, transparent);
-    margin: 25px 0;
+    background: rgba(0,0,0,0.3);
+    padding: 25px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
     position: relative;
 }
 
-/* Greeting */
+/* Segel Cap Merah (Hanko) */
+p::after {
+    content: "福"; /* Karakter keberuntungan 'Fu' */
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: #b30000;
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #800000;
+    opacity: 0.8;
+    font-weight: bold;
+}
+
+/* Garis Pemisah (Koin Emas) */
+hr {
+    border: none;
+    height: 30px;
+    background-image: radial-gradient(circle, #ffd700 20%, transparent 25%);
+    background-size: 50px 50px;
+    background-repeat: repeat-x;
+    margin: 30px 0;
+}
+
+/* Greeting / Footer */
 small {
     display: block;
-    font-style: italic;
     text-align: center;
-    color: #e5e4e2; /* Warna perak salju */
-    margin-top: 30px;
-    font-size: 14px;
+    color: #ffffff;
+    font-size: 1.1em;
+    letter-spacing: 3px;
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px dashed #d4af37;
 }
