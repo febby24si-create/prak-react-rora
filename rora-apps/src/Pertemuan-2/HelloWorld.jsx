@@ -19,7 +19,7 @@ export default function HelloWorld(){
                 nim="2457301054" 
                 tanggal={new Date().toLocaleDateString()}/>
              <UserCard {...propsUserCard}/>
-             <img src="img/harbin.png" alt="logo" width="100%" />
+             <img src="img/JAPAN.jpg" alt="logo" width="100%" />
         </div>
     )
 }
