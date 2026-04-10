@@ -20,29 +20,125 @@ export default function TailWindCSS() {
         </div>
         <ShadowEffects />
       </main>
+
+      <style>{`
+        @keyframes fadeSlideDown {
+          from { opacity: 0; transform: translateY(-16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes spinSlow {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes pulseSoft {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.5; }
+        }
+        @keyframes shimmer {
+          0%   { background-position: -200% center; }
+          100% { background-position:  200% center; }
+        }
+
+        .anim-navbar  { animation: fadeSlideDown .45s cubic-bezier(.4,0,.2,1) both; }
+        .anim-hero    { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .10s both; }
+        .anim-stat-1  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .18s both; }
+        .anim-stat-2  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .26s both; }
+        .anim-stat-3  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .34s both; }
+        .anim-spacing { animation: scaleIn       .5s  cubic-bezier(.4,0,.2,1) .42s both; }
+        .anim-typo    { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .50s both; }
+        .anim-border  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .56s both; }
+        .anim-colors  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .62s both; }
+        .anim-shadow  { animation: fadeSlideUp   .5s  cubic-bezier(.4,0,.2,1) .68s both; }
+
+        .badge-pulse { animation: pulseSoft 2.5s ease-in-out infinite; }
+
+        .shimmer-btn {
+          background: linear-gradient(90deg, #06b6d4 25%, #22d3ee 50%, #06b6d4 75%);
+          background-size: 200% auto;
+          animation: shimmer 2.4s linear infinite;
+          transition: transform .15s, box-shadow .15s;
+        }
+        .shimmer-btn:hover  { transform: translateY(-2px); }
+        .shimmer-btn:active { transform: scale(.96); }
+
+        .btn-outline {
+          transition: transform .15s, background .15s;
+        }
+        .btn-outline:hover  { transform: translateY(-2px); }
+        .btn-outline:active { transform: scale(.96); }
+
+        .stat-card {
+          transition: transform .2s, box-shadow .2s;
+          cursor: default;
+        }
+        .stat-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 28px rgba(6,182,212,.18);
+        }
+
+        .logo-icon {
+          transition: transform .3s;
+          cursor: pointer;
+        }
+        .logo-icon:hover { animation: spinSlow .8s linear; }
+
+        .nav-link {
+          transition: background .15s, color .15s, transform .15s;
+          display: inline-block;
+        }
+        .nav-link:hover { transform: translateY(-1px); }
+
+        .swatch {
+          transition: transform .2s;
+          cursor: pointer;
+        }
+        .swatch:hover { transform: scale(1.4); }
+
+        .shadow-card {
+          transition: transform .25s cubic-bezier(.4,0,.2,1),
+                      border-color .25s, box-shadow .25s;
+        }
+        .shadow-card:hover { transform: translateY(-4px); }
+
+        .sun-icon { transition: transform .3s; }
+        .shadow-card:hover .sun-icon { animation: spinSlow 2s linear infinite; }
+
+        .code-badge {
+          transition: transform .2s;
+          display: inline-block;
+          cursor: default;
+        }
+        .code-badge:hover { transform: scale(1.1); }
+      `}</style>
     </div>
   );
 }
 
 function FlexboxGrid() {
   return (
-    <nav className="bg-white/80 backdrop-blur-sm border-b border-cyan-100 px-6 h-14 flex items-center justify-between sticky top-0 z-10">
+    <nav className="anim-navbar bg-white/80 backdrop-blur-sm border-b border-cyan-100 px-6 h-14 flex items-center justify-between sticky top-0 z-10">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 bg-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md shadow-cyan-200">
+        <div className="logo-icon w-9 h-9 bg-cyan-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md shadow-cyan-200">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
             <path
               d="M4 12c1.5-5 4.5-7 7.5-7s6 2 6 5c0 2.5-1.8 4-4 4s-3.5-1.5-2.8-3.5c.4-1 1.5-1.6 2.5-1"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
+              stroke="white" strokeWidth="2" strokeLinecap="round" fill="none"
             />
             <path
               d="M7 17c1.5-5 4.5-7 7.5-7"
-              stroke="#A5F3FC"
-              strokeWidth="2"
-              strokeLinecap="round"
-              fill="none"
+              stroke="#A5F3FC" strokeWidth="2" strokeLinecap="round" fill="none"
             />
           </svg>
         </div>
@@ -55,19 +151,13 @@ function FlexboxGrid() {
       <ul className="flex items-center gap-1">
         {["Home", "About", "Contact"].map((item) => (
           <li key={item}>
-            <a
-              href="#"
-              className="text-sm text-gray-500 hover:text-gray-800 hover:bg-cyan-50 px-3 py-1.5 rounded-lg transition-colors"
-            >
+            <a href="#" className="nav-link text-sm text-gray-500 hover:text-gray-800 hover:bg-cyan-50 px-3 py-1.5 rounded-lg">
               {item}
             </a>
           </li>
         ))}
         <li>
-          <a
-            href="#"
-            className="text-sm text-red-600 bg-red-100 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors"
-          >
+          <a href="#" className="nav-link text-sm text-red-600 bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-lg">
             Logout
           </a>
         </li>
@@ -78,9 +168,9 @@ function FlexboxGrid() {
 
 function Hero() {
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl p-8 flex items-center justify-between gap-6 shadow-sm">
+    <div className="anim-hero bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl p-8 flex items-center justify-between gap-6 shadow-sm">
       <div>
-        <p className="text-xs font-semibold text-cyan-600 uppercase tracking-widest mb-2">
+        <p className="badge-pulse text-xs font-semibold text-cyan-600 uppercase tracking-widest mb-2 inline-block">
           Framework CSS
         </p>
         <h1 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
@@ -90,7 +180,7 @@ function Hero() {
           Utility-first CSS framework untuk UI modern yang cepat.
         </p>
       </div>
-      <button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap shadow-md shadow-cyan-200">
+      <button className="shimmer-btn text-white text-sm font-medium px-5 py-2.5 rounded-xl whitespace-nowrap shadow-md shadow-cyan-200">
         Mulai Belajar
       </button>
     </div>
@@ -99,17 +189,14 @@ function Hero() {
 
 function StatsRow() {
   const stats = [
-    { label: "Komponen", value: "6" },
-    { label: "Utilities", value: "50+" },
-    { label: "Versi", value: "4.0" },
+    { label: "Komponen", value: "6",    cls: "anim-stat-1" },
+    { label: "Utilities", value: "50+", cls: "anim-stat-2" },
+    { label: "Versi",     value: "4.0", cls: "anim-stat-3" },
   ];
   return (
     <div className="grid grid-cols-3 gap-4">
-      {stats.map(({ label, value }) => (
-        <div
-          key={label}
-          className="bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-xl p-4 shadow-sm"
-        >
+      {stats.map(({ label, value, cls }) => (
+        <div key={label} className={`stat-card ${cls} bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-xl p-4 shadow-sm`}>
           <p className="text-xs text-gray-400 mb-1">{label}</p>
           <p className="text-2xl font-semibold text-gray-800">{value}</p>
         </div>
@@ -120,7 +207,7 @@ function StatsRow() {
 
 function Spacing() {
   return (
-    <div className="bg-cyan-700 rounded-2xl px-8 py-6 flex items-center justify-between gap-6 shadow-lg shadow-cyan-200">
+    <div className="anim-spacing bg-cyan-700 rounded-2xl px-8 py-6 flex items-center justify-between gap-6 shadow-lg shadow-cyan-200">
       <div>
         <p className="text-xs font-semibold text-cyan-300 uppercase tracking-widest mb-2">
           Spacing
@@ -131,10 +218,11 @@ function Spacing() {
         </p>
       </div>
       <div className="flex gap-2 flex-wrap justify-end">
-        {["p-8", "m-10", "rounded-lg"].map((cls) => (
+        {["p-8", "m-10", "rounded-lg"].map((cls, i) => (
           <span
             key={cls}
             className="bg-white/15 text-white text-xs px-3 py-1 rounded-full"
+            style={{ animation: `fadeIn .4s ease ${.55 + i * .12}s both` }}
           >
             {cls}
           </span>
@@ -146,7 +234,7 @@ function Spacing() {
 
 function Typography() {
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl px-8 py-6 shadow-sm">
+    <div className="anim-typo bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl px-8 py-6 shadow-sm">
       <p className="text-xs font-semibold text-blue-700 uppercase tracking-widest mb-3">
         Typography
       </p>
@@ -157,10 +245,11 @@ function Typography() {
         Belajar Tailwind sangat menyenangkan dan cepat!
       </p>
       <div className="flex gap-2 flex-wrap">
-        {["text-3xl", "font-extrabold", "text-gray-600"].map((cls) => (
+        {["text-3xl", "font-extrabold", "text-gray-600"].map((cls, i) => (
           <code
             key={cls}
-            className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-mono"
+            className="code-badge text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md font-mono"
+            style={{ animation: `fadeIn .35s ease ${.52 + i * .1}s both` }}
           >
             {cls}
           </code>
@@ -172,20 +261,19 @@ function Typography() {
 
 function BorderRadius() {
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl p-6 flex flex-col gap-4 shadow-sm">
+    <div className="anim-border bg-white/70 backdrop-blur-sm border border-cyan-100 rounded-2xl p-6 flex flex-col gap-4 shadow-sm">
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
         Border Radius
       </p>
-      <button className="border-2 border-orange-400 text-orange-600 bg-transparent hover:bg-orange-50 font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors w-full">
+      <button className="btn-outline border-2 border-orange-400 text-orange-600 bg-transparent hover:bg-orange-50 font-semibold text-sm px-4 py-2.5 rounded-xl w-full">
         Klik Saya
       </button>
       <div className="flex gap-2 flex-wrap">
-        <code className="text-xs bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md font-mono">
-          rounded-xl
-        </code>
-        <code className="text-xs bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md font-mono">
-          border-2
-        </code>
+        {["rounded-xl", "border-2"].map((cls) => (
+          <code key={cls} className="code-badge text-xs bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md font-mono">
+            {cls}
+          </code>
+        ))}
       </div>
     </div>
   );
@@ -194,7 +282,7 @@ function BorderRadius() {
 function BackgroundColors() {
   const swatches = ["bg-blue-500", "bg-blue-400", "bg-blue-300", "bg-blue-200"];
   return (
-    <div className="bg-blue-600 rounded-2xl p-6 flex flex-col justify-between shadow-lg shadow-blue-200">
+    <div className="anim-colors bg-blue-600 rounded-2xl p-6 flex flex-col justify-between shadow-lg shadow-blue-200">
       <div>
         <p className="text-xs font-semibold text-blue-200 uppercase tracking-widest mb-2">
           Background
@@ -205,10 +293,11 @@ function BackgroundColors() {
         <p className="text-sm text-blue-200">Seru dan fleksibel!</p>
       </div>
       <div className="flex gap-2 mt-4">
-        {swatches.map((s) => (
+        {swatches.map((s, i) => (
           <div
             key={s}
-            className={`w-5 h-5 rounded-full border-2 border-white/40 ${s}`}
+            className={`swatch w-5 h-5 rounded-full border-2 border-white/40 ${s}`}
+            style={{ animation: `fadeIn .3s ease ${.65 + i * .08}s both` }}
           />
         ))}
       </div>
@@ -218,23 +307,19 @@ function BackgroundColors() {
 
 function ShadowEffects() {
   return (
-    <div className="bg-white/70 backdrop-blur-sm border border-cyan-100 hover:border-cyan-300 hover:shadow-lg hover:shadow-cyan-200 rounded-2xl px-8 py-5 flex items-center gap-6 transition-all duration-300 group shadow-sm">
+    <div className="shadow-card anim-shadow bg-white/70 backdrop-blur-sm border border-cyan-100 hover:border-cyan-300 hover:shadow-lg hover:shadow-cyan-200 rounded-2xl px-8 py-5 flex items-center gap-6 shadow-sm group">
       <div className="w-12 h-12 bg-cyan-50 group-hover:bg-cyan-100 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors">
-        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <svg className="sun-icon" width="22" height="22" viewBox="0 0 22 22" fill="none">
           <circle cx="11" cy="11" r="4" stroke="#0891B2" strokeWidth="1.8" />
           <path
             d="M11 2v2M11 18v2M2 11h2M18 11h2M4.93 4.93l1.41 1.41M15.66 15.66l1.41 1.41M4.93 17.07l1.41-1.41M15.66 6.34l1.41-1.41"
-            stroke="#0891B2"
-            strokeWidth="1.8"
-            strokeLinecap="round"
+            stroke="#0891B2" strokeWidth="1.8" strokeLinecap="round"
           />
         </svg>
       </div>
 
       <div className="flex-1">
-        <h3 className="text-base font-semibold text-gray-800 mb-1">
-          Shadow Effects
-        </h3>
+        <h3 className="text-base font-semibold text-gray-800 mb-1">Shadow Effects</h3>
         <p className="text-sm text-gray-400">
           Hover untuk lihat efek bayangan dengan{" "}
           <code className="text-xs bg-gray-100 text-cyan-700 px-1.5 py-0.5 rounded font-mono">
@@ -245,12 +330,11 @@ function ShadowEffects() {
       </div>
 
       <div className="flex flex-col gap-1.5 items-end">
-        <code className="text-xs bg-cyan-50 text-cyan-700 px-2.5 py-1 rounded-md font-mono">
-          shadow-lg
-        </code>
-        <code className="text-xs bg-cyan-50 text-cyan-700 px-2.5 py-1 rounded-md font-mono">
-          hover:shadow-cyan-200
-        </code>
+        {["shadow-lg", "hover:shadow-cyan-200"].map((cls) => (
+          <code key={cls} className="code-badge text-xs bg-cyan-50 text-cyan-700 px-2.5 py-1 rounded-md font-mono">
+            {cls}
+          </code>
+        ))}
       </div>
     </div>
   );
