@@ -4,41 +4,63 @@ import frameworkData from "./framework.json";
 const icons = ["⚡", "🌐", "🔷", "🟢", "🔵", "🔶", "🛠", "🌀", "🚀", "💡"];
 
 export default function FrameworkListSearchFilter() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
+  // 1. Inisialisasi State dalam satu objek
+  const [dataForm, setDataForm] = useState({
+    searchTerm: "",
+    selectedTag: "",
+  });
+
   const cardRefs = useRef([]);
 
-  // Logic Search & Filter menggunakan useMemo untuk performa
+  // 2. Handle perubahan nilai input secara dinamis
+  const handleChange = (evt) => {
+    const { name, value } = evt.target;
+    setDataForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // 3. Logic Search & Filter (useMemo untuk performa)
   const filteredFrameworks = useMemo(() => {
-    const term = searchTerm.toLowerCase();
+    const term = dataForm.searchTerm.toLowerCase();
     return frameworkData.filter((fw) => {
       const matchesSearch =
         fw.name.toLowerCase().includes(term) ||
         fw.description.toLowerCase().includes(term);
-      const matchesTag = selectedTag ? fw.tags.includes(selectedTag) : true;
+      const matchesTag = dataForm.selectedTag 
+        ? fw.tags.includes(dataForm.selectedTag) 
+        : true;
       return matchesSearch && matchesTag;
     });
-  }, [searchTerm, selectedTag]);
+  }, [dataForm.searchTerm, dataForm.selectedTag]);
 
-  // Ambil unique tags
+  // 4. Ambil unique tags untuk dropdown
   const allTags = useMemo(() => {
     return [...new Set(frameworkData.flatMap((fw) => fw.tags))];
   }, []);
 
-  // Animasi saat data berubah
+  // 5. Animasi Staggered yang lebih aman
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, filteredFrameworks.length);
-    cardRefs.current.forEach((card, i) => {
-      if (!card) return;
-      // Reset state sebelum animasi
+    
+    const timeouts = cardRefs.current.map((card, i) => {
+      if (!card) return null;
+      
+      // Initial state
+      card.style.transition = "none";
       card.style.opacity = "0";
       card.style.transform = "translateY(20px)";
-      
-      setTimeout(() => {
+
+      // Trigger animasi dengan sedikit delay (stagger)
+      return setTimeout(() => {
+        card.style.transition = "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
         card.style.opacity = "1";
         card.style.transform = "translateY(0)";
-      }, i * 60);
+      }, i * 50);
     });
+
+    return () => timeouts.forEach(t => clearTimeout(t));
   }, [filteredFrameworks]);
 
   return (
@@ -96,7 +118,9 @@ export default function FrameworkListSearchFilter() {
           border-radius: 12px;
           outline: none;
           font-family: inherit;
+          transition: border-color 0.2s;
         }
+        .fw-input:focus, .fw-select:focus { border-color: var(--accent-1); }
         .fw-input { flex: 2; min-width: 250px; }
         .fw-select { flex: 1; min-width: 150px; cursor: pointer; }
         .fw-grid {
@@ -113,7 +137,8 @@ export default function FrameworkListSearchFilter() {
           backdrop-filter: blur(12px);
           opacity: 0;
           transform: translateY(20px);
-          transition: border-color 0.25s, box-shadow 0.25s;
+          display: flex;
+          flex-direction: column;
         }
         .fw-card:hover {
           border-color: rgba(108, 99, 255, 0.4);
@@ -138,7 +163,7 @@ export default function FrameworkListSearchFilter() {
         .fw-card h2 { font-family: 'Syne', sans-serif; margin-bottom: 0.2rem; }
         .fw-dev { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; }
         .fw-dev span { color: var(--accent-2); }
-        .fw-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; min-height: 3em; }
+        .fw-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; flex-grow: 1; }
         .fw-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
         .fw-tag {
           font-size: 10px;
@@ -174,16 +199,18 @@ export default function FrameworkListSearchFilter() {
           <div className="fw-controls">
             <input
               type="text"
+              name="searchTerm" // HARUS Sesuai dengan key di dataForm
               placeholder="Search framework..."
               className="fw-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={dataForm.searchTerm}
+              onChange={handleChange}
             />
 
             <select
+              name="selectedTag" // HARUS Sesuai dengan key di dataForm
               className="fw-select"
-              value={selectedTag}
-              onChange={(e) => setSelectedTag(e.target.value)}
+              value={dataForm.selectedTag}
+              onChange={handleChange}
             >
               <option value="">All Categories</option>
               {allTags.map((tag) => (
@@ -193,43 +220,49 @@ export default function FrameworkListSearchFilter() {
           </div>
 
           <div className="fw-grid">
-            {filteredFrameworks.map((item, i) => (
-              <div
-                key={item.id}
-                className="fw-card"
-                ref={(el) => (cardRefs.current[i] = el)}
-              >
-                <div className="fw-card-top">
-                  <div className="fw-icon">{icons[i % icons.length]}</div>
-                  <span className="fw-year">{item.details.releaseYear}</span>
-                </div>
+            {filteredFrameworks.length > 0 ? (
+              filteredFrameworks.map((item, i) => (
+                <div
+                  key={item.id}
+                  className="fw-card"
+                  ref={(el) => (cardRefs.current[i] = el)}
+                >
+                  <div className="fw-card-top">
+                    <div className="fw-icon">{icons[i % icons.length]}</div>
+                    <span className="fw-year">{item.details.releaseYear}</span>
+                  </div>
 
-                <h2>{item.name}</h2>
-                <div className="fw-dev">
-                  by <span>{item.details.developer}</span>
-                </div>
+                  <h2>{item.name}</h2>
+                  <div className="fw-dev">
+                    by <span>{item.details.developer}</span>
+                  </div>
 
-                <p className="fw-desc">{item.description}</p>
+                  <p className="fw-desc">{item.description}</p>
 
-                <div className="fw-tags">
-                  {item.tags.map((tag, idx) => (
-                    <span key={idx} className="fw-tag">{tag}</span>
-                  ))}
-                </div>
+                  <div className="fw-tags">
+                    {item.tags.map((tag, idx) => (
+                      <span key={idx} className="fw-tag">{tag}</span>
+                    ))}
+                  </div>
 
-                <div className="fw-footer">
-                  <a
-                    href={item.details.officialWebsite}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="fw-link"
-                  >
-                    Explore Docs ↗
-                  </a>
-                  <span className="fw-id">#{String(item.id).padStart(2, "0")}</span>
+                  <div className="fw-footer">
+                    <a
+                      href={item.details.officialWebsite}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="fw-link"
+                    >
+                      Explore Docs ↗
+                    </a>
+                    <span className="fw-id">#{String(item.id).padStart(2, "0")}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ textAlign: 'center', gridColumn: '1/-1', opacity: 0.5 }}>
+                No frameworks found matching your criteria.
+              </p>
+            )}
           </div>
         </div>
       </div>
