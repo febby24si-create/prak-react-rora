@@ -265,7 +265,7 @@ function BorderRadius() {
       <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
         Border Radius
       </p>
-      <button className="btn-outline border-2 border-orange-400 text-orange-600 bg-transparent hover:bg-orange-50 font-semibold text-sm px-4 py-2.5 rounded-xl w-full">
+      <button className="btn-outline border-2 border-orange-400 text-white-600 bg-transparent hover:bg-orange-600 font-semibold text-sm px-4 py-2.5 rounded-xl w-full">
         Klik Saya
       </button>
       <div className="flex gap-2 flex-wrap">
