@@ -1,4 +1,4 @@
-import { useI } from "react";
+import { useState } from "react";
 import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaStar, FaRegStar } from "react-icons/fa";
 import { FiMoreVertical, FiEdit2, FiTrash2, FiEye } from "react-icons/fi";
 import PageHeader from "../components/PageHeader";
