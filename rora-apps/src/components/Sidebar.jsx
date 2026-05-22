@@ -1,11 +1,16 @@
 import { NavLink } from "react-router-dom";
 import {
-  MdDashboard, MdShoppingCart, MdPeople,
-  MdErrorOutline, MdWarning
+  MdDashboard, 
+  MdInventory, // Ikon baru untuk menu Products
+  MdShoppingCart, 
+  MdPeople,
+  MdErrorOutline, 
+  MdWarning
 } from "react-icons/md";
 
 const menuItems = [
   { icon: MdDashboard, label: "Dashboard", path: "/" },
+  { icon: MdInventory, label: "Products", path: "/products" }, // Menu Produk Baru
   { icon: MdShoppingCart, label: "Order List", path: "/orders" },
   { icon: MdPeople, label: "Customers", path: "/customers" },
   { icon: MdErrorOutline, label: "Error 400", path: "/error-400" },
