@@ -13,3 +13,5 @@ export default function ErrorPage({ code, description, image }) {
     </div>
   );
 }
+
+
