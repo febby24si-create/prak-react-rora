@@ -3,21 +3,21 @@ import { Routes, Route } from "react-router-dom";
 import Loading from "./components/Loading";
 
 // Lazy Load Komponen Existing
-const Dashboard = React.lazy(() => import("./pages/Dashboard"));
-const Orders = React.lazy(() => import("./pages/Orders"));
-const Customer = React.lazy(() => import("./pages/Customer"));
-const ErrorPage = React.lazy(() => import("./components/ErrorPage"));
-const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
-const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
-const Login = React.lazy(() => import("./pages/auth/Login"));
-const Register = React.lazy(() => import("./pages/auth/Register"));
-const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
+const Dashboard    = React.lazy(() => import("./pages/Dashboard"));
+const Orders       = React.lazy(() => import("./pages/Orders"));
+const Customer     = React.lazy(() => import("./pages/Customer"));
+const ErrorPage    = React.lazy(() => import("./components/ErrorPage"));
+const MainLayout   = React.lazy(() => import("./layouts/MainLayout"));
+const AuthLayout   = React.lazy(() => import("./layouts/AuthLayout"));
+const Login        = React.lazy(() => import("./pages/auth/Login"));
+const Register     = React.lazy(() => import("./pages/auth/Register"));
+const Forgot       = React.lazy(() => import("./pages/auth/Forgot"));
+const Products     = React.lazy(() => import("./pages/Products"));
+const ProductDetail= React.lazy(() => import("./pages/ProductDetail"));
 
-// Import Lazy Load untuk Halaman Produk Baru
-const Products = React.lazy(() => import("./pages/Products")); // Sesuaikan dengan folder tempat Anda menyimpan Products.jsx
-const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+// ✅ Pertemuan 10 — Components Page
+const Components   = React.lazy(() => import("./pages/Components"));
 
-// Halaman error
 const Error400 = () => <ErrorPage code="400" description="Bad Request" />;
 const Error401 = () => <ErrorPage code="401" description="Unauthorized" />;
 const Error403 = () => <ErrorPage code="403" description="Forbidden" />;
@@ -29,28 +29,26 @@ function App() {
       <Routes>
         {/* Main Layout / Authenticated Routes */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          
-          {/* RUTE BARU: Halaman Produk */}
-          <Route path="/products" element={<Products />} />
-          
-          <Route path="/orders" element={<Orders />} />
-          
-          {/* Diselaraskan menjadi /customers (jamak) agar sesuai dengan NavLink di Sidebar */}
-          <Route path="/customers" element={<Customer />} />
-          
-          <Route path="/error-400" element={<Error400 />} />
-          <Route path="/error-401" element={<Error401 />} />
-          <Route path="/error-403" element={<Error403 />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/products/:id" element={<ProductDetail />} /> 
+          <Route path="/"           element={<Dashboard />} />
+          <Route path="/products"   element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/orders"     element={<Orders />} />
+          <Route path="/customers"  element={<Customer />} />
+
+          {/* ✅ Pertemuan 10 */}
+          <Route path="/components" element={<Components />} />
+
+          <Route path="/error-400"  element={<Error400 />} />
+          <Route path="/error-401"  element={<Error401 />} />
+          <Route path="/error-403"  element={<Error403 />} />
+          <Route path="*"           element={<NotFound />} />
         </Route>
 
-        {/* Auth Layout / Non-Authenticated Routes */}
+        {/* Auth Layout */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login"    element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot" element={<Forgot />} />
+          <Route path="/forgot"   element={<Forgot />} />
         </Route>
       </Routes>
     </Suspense>
