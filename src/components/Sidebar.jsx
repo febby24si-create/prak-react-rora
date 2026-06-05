@@ -85,7 +85,6 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Promo Banner */}
 
     </aside>
   );
