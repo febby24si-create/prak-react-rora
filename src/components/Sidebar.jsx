@@ -94,9 +94,7 @@ export default function Sidebar() {
           }}
         >
           <div className="flex-1">
-            <p className="text-white/90 text-[11px] leading-relaxed mb-2.5">
-              Please organize your menus through button below!
-            </p>
+
             <div className="bg-white rounded-lg py-1.5 text-center cursor-pointer hover:bg-gray-50 transition-colors">
               <span className="text-[11px] font-bold text-gray-700">
                 + Add Menus

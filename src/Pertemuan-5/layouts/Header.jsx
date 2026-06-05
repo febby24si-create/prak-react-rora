@@ -44,16 +44,7 @@ export default function Header() {
     <>
       <div className="flex justify-between items-center px-6 py-3 bg-white rounded-xl shadow-sm dark:bg-gray-800 mb-4">
 
-        {/* SEARCH */}
-        <div className="relative w-full max-w-md">
-          <input
-            type="text"
-            placeholder="Search Here..."
-            onClick={() => setOpenSearch(true)}
-            className="border border-gray-200 bg-gray-50 p-2.5 pr-10 w-full rounded-xl outline-none text-sm dark:bg-gray-700 dark:text-white focus:border-hijau transition-colors"
-          />
-          <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
-        </div>
+
 
         {/* ICONS */}
         <div className="flex items-center space-x-2">
