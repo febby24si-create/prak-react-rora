@@ -85,7 +85,33 @@ export default function Sidebar() {
         ))}
       </nav>
 
+      {/* Promo Banner */}
+      <div className="px-3 pb-5">
+        <div
+          className="rounded-2xl p-4 flex items-center gap-3"
+          style={{
+            background: "linear-gradient(135deg, #00b074 0%, #009060 100%)",
+          }}
+        >
+          <div className="flex-1">
 
+            <div className="bg-white rounded-lg py-1.5 text-center cursor-pointer hover:bg-gray-50 transition-colors">
+              <span className="text-[11px] font-bold text-gray-700">
+                + Add Menus
+              </span>
+            </div>
+          </div>
+          <img
+            src="https://avatar.iran.liara.run/public/28"
+            className="w-[52px] h-[52px] rounded-full flex-shrink-0"
+            alt="avatar"
+          />
+        </div>
+        <p className="text-[10px] text-gray-400 text-center mt-3 leading-relaxed">
+          Sedap Restaurant Admin Dashboard
+          <br />© 2025 All Right Reserved
+        </p>
+      </div>
     </aside>
   );
 }
