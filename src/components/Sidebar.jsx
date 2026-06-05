@@ -10,13 +10,14 @@ import {
 } from "react-icons/md";
 
 const menuItems = [
-  { icon: MdDashboard,  label: "Dashboard",   path: "/" },
-  { icon: MdInventory,  label: "Products",    path: "/products" },
+  { icon: MdDashboard, label: "Dashboard", path: "/" },
+  { icon: MdInventory, label: "Products", path: "/products" },
   { icon: MdShoppingCart, label: "Order List", path: "/orders" },
-  { icon: MdPeople,     label: "Customers",   path: "/customers" },
-  { icon: MdWidgets,    label: "Components",  path: "/components" },
+  { icon: MdPeople, label: "Customers", path: "/customers" },
+  { icon: MdWidgets, label: "Fitur XYZ", path: "/fitur-xyz" },
+  { icon: MdWidgets, label: "Components", path: "/components" },
   { icon: MdErrorOutline, label: "Error 400", path: "/error-400" },
-  { icon: MdWarning,    label: "Error 401",   path: "/error-401" },
+  { icon: MdWarning, label: "Error 401", path: "/error-401" },
   { icon: MdErrorOutline, label: "Error 403", path: "/error-403" },
 ];
 
@@ -33,16 +34,24 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="px-6 py-6 border-b border-gray-100">
         <div className="flex items-baseline">
-          <span className="text-[28px] font-extrabold text-gray-800 tracking-tight">Sedap</span>
-          <span className="text-[32px] font-black text-hijau leading-none">.</span>
+          <span className="text-[28px] font-extrabold text-gray-800 tracking-tight">
+            Sedap
+          </span>
+          <span className="text-[32px] font-black text-hijau leading-none">
+            .
+          </span>
         </div>
-        <p className="text-[11px] text-gray-400 mt-0.5 font-medium tracking-wide">Modern Admin Dashboard</p>
+        <p className="text-[11px] text-gray-400 mt-0.5 font-medium tracking-wide">
+          Modern Admin Dashboard
+        </p>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
         {/* Main Menu */}
-        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mb-2">Main Menu</p>
+        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mb-2">
+          Main Menu
+        </p>
         {menuItems.slice(0, 4).map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
@@ -51,17 +60,23 @@ export default function Sidebar() {
         ))}
 
         {/* Learning */}
-        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">Learning</p>
+        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">
+          Learning
+        </p>
         {menuItems.slice(4, 5).map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
             {label}
-            <span className="ml-auto text-[9px] font-bold bg-hijau text-white px-1.5 py-0.5 rounded-full">P10</span>
+            <span className="ml-auto text-[9px] font-bold bg-hijau text-white px-1.5 py-0.5 rounded-full">
+              P10
+            </span>
           </NavLink>
         ))}
 
         {/* Error Pages */}
-        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">Error Pages</p>
+        <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">
+          Error Pages
+        </p>
         {menuItems.slice(5).map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
@@ -74,14 +89,18 @@ export default function Sidebar() {
       <div className="px-3 pb-5">
         <div
           className="rounded-2xl p-4 flex items-center gap-3"
-          style={{ background: "linear-gradient(135deg, #00b074 0%, #009060 100%)" }}
+          style={{
+            background: "linear-gradient(135deg, #00b074 0%, #009060 100%)",
+          }}
         >
           <div className="flex-1">
             <p className="text-white/90 text-[11px] leading-relaxed mb-2.5">
               Please organize your menus through button below!
             </p>
             <div className="bg-white rounded-lg py-1.5 text-center cursor-pointer hover:bg-gray-50 transition-colors">
-              <span className="text-[11px] font-bold text-gray-700">+ Add Menus</span>
+              <span className="text-[11px] font-bold text-gray-700">
+                + Add Menus
+              </span>
             </div>
           </div>
           <img
@@ -91,7 +110,8 @@ export default function Sidebar() {
           />
         </div>
         <p className="text-[10px] text-gray-400 text-center mt-3 leading-relaxed">
-          Sedap Restaurant Admin Dashboard<br />© 2025 All Right Reserved
+          Sedap Restaurant Admin Dashboard
+          <br />© 2025 All Right Reserved
         </p>
       </div>
     </aside>
