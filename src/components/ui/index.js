@@ -8,8 +8,15 @@ export { default as Container }     from "./Container";
 export { default as Footer }        from "./Footer";
 
 // Data Display Components
-export { default as Card }          from "./Card";
-export { CardStat }                 from "./Card";
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+} from "./Card";
 export { default as ProductCard }   from "./ProductCard";
 export { default as Table }         from "./Table";
 
