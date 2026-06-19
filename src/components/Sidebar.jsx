@@ -15,6 +15,7 @@ const menuItems = [
   { icon: MdShoppingCart, label: "Order List", path: "/orders" },
   { icon: MdPeople, label: "Customers", path: "/customers" },
   { icon: MdWidgets, label: "Fitur XYZ", path: "/fitur-xyz" },
+  { icon: MdWidgets, label: "Notes", path: "/notes" },
   { icon: MdWidgets, label: "Components", path: "/components" },
   { icon: MdErrorOutline, label: "Error 400", path: "/error-400" },
   { icon: MdWarning, label: "Error 401", path: "/error-401" },
