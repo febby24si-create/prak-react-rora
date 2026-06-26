@@ -1,70 +1,39 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
-  // Mengisi default value agar tidak perlu ketik manual saat testing
+
   const [dataForm, setDataForm] = useState({
-    email: "emilys", // DummyJSON menggunakan username untuk login
-    password: "emilyspass",
+    email: "",
+    password: "",
   });
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
-    setDataForm({
-      ...dataForm,
-      [name]: value,
-    });
+    setDataForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(false);
+    setError("");
 
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
-        password: dataForm.password,
-      })
-      .then((response) => {
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      await signIn(dataForm.email, dataForm.password);
+      navigate("/");
+    } catch (err) {
+      setError(err.message || "Login gagal. Periksa email dan password Anda.");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const errorInfo = error ? (
-    <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
-      <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
-      {error}
-    </div>
-  ) : null;
-
-  const loadingInfo = loading ? (
-    <div className="bg-gray-200 mb-5 p-5 text-sm rounded flex items-center">
-      <ImSpinner2 className="me-2 animate-spin" />
-      Mohon Tunggu...
-    </div>
-  ) : null;
 
   return (
     <div>
@@ -72,27 +41,37 @@ export default function Login() {
         Welcome Back 👋
       </h2>
 
-      {errorInfo}
-      {loadingInfo}
+      {error && (
+        <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
+          <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <div className="bg-gray-200 mb-5 p-5 text-sm rounded flex items-center">
+          <ImSpinner2 className="me-2 animate-spin" />
+          Mohon Tunggu...
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
-        {/* Input Email / Username */}
         <div className="mb-5">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email / Username
+            Email
           </label>
           <input
-            type="text"
+            type="email"
             id="email"
             name="email"
             value={dataForm.email}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400"
             placeholder="you@example.com"
           />
         </div>
 
-        {/* Input Password */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Password
@@ -103,31 +82,28 @@ export default function Login() {
             name="password"
             value={dataForm.password}
             onChange={handleChange}
+            required
             className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400"
             placeholder="********"
           />
         </div>
 
-        {/* Tombol Login */}
         <button
           type="submit"
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-6"
+          disabled={loading}
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Login
+          {loading ? "Memproses..." : "Login"}
         </button>
       </form>
 
-      {/* STRUKTUR BARU: Navigasi Menu Bertumpuk di Bawah Form */}
       <div className="flex flex-col items-center space-y-3 text-sm text-gray-600">
-        {/* Link Register di atas */}
         <p>
           Don't have an account?{" "}
           <Link to="/register" className="text-green-600 font-medium hover:underline">
             Register
           </Link>
         </p>
-        
-        {/* Link Forgot Password tepat di bawahnya */}
         <Link to="/forgot" className="text-green-600 hover:underline text-xs">
           Forgot Your Password?
         </Link>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaShoppingCart,
@@ -10,6 +10,7 @@ import {
   FaChartLine
 } from "react-icons/fa";
 import PageHeader from "../components/PageHeader";
+import { supabase } from "../services/supabaseClient";
 
 /* =========================
    ANIMATION VARIANTS
@@ -151,7 +152,7 @@ function AreaChart({ data }) {
           cx={x}
           cy={ys[i]}
           r="4"
-          fill="#white"
+          fill="white"
           stroke="#3b82f6"
           strokeWidth="2.5"
         />
@@ -191,45 +192,107 @@ function TrendDown() {
   );
 }
 
-/* =========================
-   FIXED MOCK DATA
-========================= */
-const stats = [
-  { Icon: FaShoppingCart, value: "75", label: "Total Orders", trend: "+4% (30d)", up: true, iconBg: "bg-emerald-500", textBg: "text-emerald-500" },
-  { Icon: FaTruck, value: "357", label: "Total Delivered", trend: "+12% (30d)", up: true, iconBg: "bg-blue-500", textBg: "text-blue-500" },
-  { Icon: FaBan, value: "65", label: "Total Canceled", trend: "-25% (30d)", up: false, iconBg: "bg-rose-500", textBg: "text-rose-500" },
-  { Icon: FaDollarSign, value: "$12,840", label: "Total Revenue", trend: "+25% (30d)", up: true, iconBg: "bg-amber-500", textBg: "text-amber-500" },
-];
-
-const donuts = [
-  { label: "Total Order", value: 81, color: "#f43f5e", track: "#ffe4e6" },
-  { label: "Customer Growth", value: 22, color: "#10b981", track: "#d1fae5" },
-  { label: "Total Revenue", value: 62, color: "#3b82f6", track: "#dbeafe" },
-];
-
-const miniStats = [
-  { label: "Monthly Target", value: "2,456", trend: "+12.5%", icon: FaChartLine, color: "text-emerald-500" },
-  { label: "Active Customers", value: "1,280", trend: "+8.3%", icon: FaUsers, color: "text-blue-500" },
-  { label: "Menu Items", value: "48 Dishes", trend: "0.0%", icon: FaUtensils, color: "text-amber-500" },
-];
-
-const areaData = [
-  { day: "Sun", v: 200 },
-  { day: "Mon", v: 300 },
-  { day: "Tue", v: 260 },
-  { day: "Wed", v: 456 },
-  { day: "Thu", v: 380 },
-  { day: "Fri", v: 420 },
-  { day: "Sat", v: 350 },
-];
+const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const rp = (n) => "Rp " + Number(n).toLocaleString("id-ID");
 
 /* =========================
    MAIN DASHBOARD COMPONENT
 ========================= */
 export default function Dashboard() {
+  const [stats, setStats] = useState({
+    totalOrders: 0,
+    completedOrders: 0,
+    canceledOrders: 0,
+    totalRevenue: 0,
+    totalCustomers: 0,
+    totalProducts: 0,
+    pendingOrders: 0,
+  });
+  const [areaData, setAreaData] = useState(weekDays.map((day) => ({ day, v: 0 })));
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        const [ordersRes, customersRes, productsRes] = await Promise.all([
+          supabase.from("orders").select("total, status, created_at"),
+          supabase.from("customers").select("id", { count: "exact", head: true }),
+          supabase.from("products").select("id", { count: "exact", head: true }),
+        ]);
+
+        const orders = ordersRes.data || [];
+        const totalOrders = orders.length;
+        const completedOrders = orders.filter((o) => o.status === "Selesai").length;
+        const canceledOrders = orders.filter((o) => o.status === "Dibatalkan").length;
+        const pendingOrders = orders.filter((o) => o.status === "Pending" || o.status === "Diproses").length;
+        const totalRevenue = orders
+          .filter((o) => o.status === "Selesai")
+          .reduce((a, b) => a + Number(b.total || 0), 0);
+
+        const dailyTotals = weekDays.map((day, i) => {
+          const today = new Date();
+          const target = new Date(today);
+          target.setDate(today.getDate() - (6 - i));
+          const dayStr = target.toISOString().slice(0, 10);
+          const dayOrders = orders.filter((o) => {
+            const d = o.created_at ? o.created_at.slice(0, 10) : "";
+            return d === dayStr;
+          });
+          return {
+            day,
+            v: dayOrders.filter((o) => o.status === "Selesai").reduce((a, b) => a + Number(b.total || 0), 0),
+          };
+        });
+
+        setStats({
+          totalOrders,
+          completedOrders,
+          canceledOrders,
+          totalRevenue,
+          totalCustomers: customersRes.count || 0,
+          totalProducts: productsRes.count || 0,
+          pendingOrders,
+        });
+        setAreaData(dailyTotals);
+      } catch (err) {
+        console.error("Gagal memuat dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin w-8 h-8 border-4 border-hijau border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  const statCards = [
+    { Icon: FaShoppingCart, value: stats.totalOrders.toString(), label: "Total Orders", trend: "", up: true, iconBg: "bg-emerald-500" },
+    { Icon: FaTruck, value: stats.completedOrders.toString(), label: "Completed", trend: `${stats.pendingOrders} pending`, up: true, iconBg: "bg-blue-500" },
+    { Icon: FaBan, value: stats.canceledOrders.toString(), label: "Canceled", trend: "", up: false, iconBg: "bg-rose-500" },
+    { Icon: FaDollarSign, value: rp(stats.totalRevenue), label: "Total Revenue", trend: "", up: true, iconBg: "bg-amber-500" },
+  ];
+
+  const donuts = [
+    { label: "Completion Rate", value: stats.totalOrders > 0 ? Math.round((stats.completedOrders / stats.totalOrders) * 100) : 0, color: "#f43f5e", track: "#ffe4e6" },
+    { label: "Customers", value: stats.totalCustomers > 0 ? Math.min(stats.totalCustomers, 100) : 0, color: "#10b981", track: "#d1fae5" },
+    { label: "Products", value: stats.totalProducts > 0 ? Math.min(stats.totalProducts, 100) : 0, color: "#3b82f6", track: "#dbeafe" },
+  ];
+
+  const miniStats = [
+    { label: "Total Products", value: stats.totalProducts.toString(), icon: FaUtensils, color: "text-amber-500" },
+    { label: "Customers", value: stats.totalCustomers.toString(), icon: FaUsers, color: "text-blue-500" },
+    { label: "Pending Orders", value: stats.pendingOrders.toString(), icon: FaChartLine, color: "text-emerald-500" },
+  ];
+
   return (
     <div className="space-y-6 pb-8">
-      <PageHeader />
+      <PageHeader title="Dashboard" breadcrumb="Admin overview & analytics" />
 
       {/* =========================
           STAT CARDS (RESPONSIVE)
@@ -241,7 +304,7 @@ export default function Dashboard() {
         viewport={{ once: true }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
       >
-        {stats.map(({ Icon, value, label, trend, up, iconBg, textBg }) => (
+        {statCards.map(({ Icon, value, label, trend, up, iconBg }) => (
           <motion.div
             key={label}
             variants={fadeUp}
@@ -255,10 +318,12 @@ export default function Dashboard() {
             <div className="overflow-hidden">
               <p className="text-2xl font-black text-gray-800 tracking-tight">{value}</p>
               <p className="text-xs font-medium text-gray-400 mt-0.5 truncate">{label}</p>
-              <div className={`flex items-center gap-1 text-[11px] font-bold mt-1.5 ${up ? "text-emerald-500" : "text-rose-500"}`}>
-                {up ? <TrendUp /> : <TrendDown />}
-                <span>{trend}</span>
-              </div>
+              {trend && (
+                <div className={`flex items-center gap-1 text-[11px] font-bold mt-1.5 ${up ? "text-emerald-500" : "text-rose-500"}`}>
+                  {up ? <TrendUp /> : <TrendDown />}
+                  <span>{trend}</span>
+                </div>
+              )}
             </div>
           </motion.div>
         ))}
@@ -280,7 +345,7 @@ export default function Dashboard() {
           <div className="mb-6">
             <span className="text-xs font-bold text-emerald-500 uppercase tracking-wider">Analytics Center</span>
             <h2 className="text-xl font-extrabold text-gray-800 mt-0.5">Revenue Overview</h2>
-            <p className="text-xs text-gray-400 mt-1">Summary performance metrics for this active month</p>
+            <p className="text-xs text-gray-400 mt-1">Real-time performance metrics</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -316,22 +381,18 @@ export default function Dashboard() {
         >
           <div className="mb-5">
             <span className="text-xs font-bold text-blue-500 uppercase tracking-wider">Performance Report</span>
-            <h2 className="text-xl font-extrabold text-gray-800 mt-0.5">Order Statistics</h2>
+            <h2 className="text-xl font-extrabold text-gray-800 mt-0.5">Daily Revenue</h2>
           </div>
 
           {/* DYNAMIC MINI STATS */}
           <div className="grid grid-cols-3 gap-3 mb-5">
-            {miniStats.map(({ label, value, trend, icon: MiniIcon, color }) => (
+            {miniStats.map(({ label, value, icon: MiniIcon, color }) => (
               <div key={label} className="rounded-2xl p-3.5 bg-gray-50 border border-gray-100/70 flex flex-col justify-between">
                 <div className="flex items-center justify-between gap-1">
                   <p className="text-[11px] font-medium text-gray-400 truncate">{label}</p>
                   <MiniIcon className={`text-xs ${color} shrink-0`} />
                 </div>
                 <h3 className="text-lg font-black text-gray-800 mt-1.5 tracking-tight">{value}</h3>
-                <div className="flex items-center gap-0.5 mt-1 text-emerald-500 text-[10px] font-bold">
-                  <TrendUp />
-                  <span>{trend}</span>
-                </div>
               </div>
             ))}
           </div>

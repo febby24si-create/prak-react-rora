@@ -7,7 +7,7 @@
  *  onView   : fn(product)
  */
 
-import Badge from "./Badge";
+import { Badge } from "./Badge";
 
 const categoryMeta = {
   Electronics: { variant: "info",    emoji: "💻" },

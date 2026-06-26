@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaBell,
   FaSearch,
   FaComments,
   FaGift,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { SlSettings } from "react-icons/sl";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Header() {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   const [openSearch, setOpenSearch] = useState(false);
   const [openNotif, setOpenNotif] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
   const [search, setSearch] = useState("");
   const [darkMode, setDarkMode] = useState(false);
 
@@ -33,6 +39,7 @@ export default function Header() {
         setOpenSearch(false);
         setOpenSettings(false);
         setOpenNotif(false);
+        setOpenProfile(false);
       }
     };
 
@@ -49,6 +56,17 @@ export default function Header() {
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout gagal:", err);
+    }
+  };
+
+  const displayName = user?.email?.split("@")[0] || "User";
 
   return (
     <>
@@ -284,31 +302,63 @@ export default function Header() {
             <SlSettings className="text-base" />
           </motion.div>
 
-          {/* PROFILE */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="
-              flex items-center space-x-3
-              border-l border-gray-100
-              pl-4 ml-2
-            "
-          >
-            <span className="text-gray-600 text-sm dark:text-white">
-              Hello, <b>Febby Fahrezy</b>
-            </span>
-
-            <motion.img
-              whileHover={{ rotate: 5 }}
-              src="ree.jpeg"
+          {/* PROFILE with Dropdown */}
+          <div className="relative">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              onClick={() => setOpenProfile(!openProfile)}
               className="
-                w-9 h-9
-                rounded-full
-                object-cover
-                ring-2 ring-hijau ring-offset-1
+                flex items-center space-x-3
+                border-l border-gray-100
+                pl-4 ml-2
+                cursor-pointer
               "
-              alt="profile"
-            />
-          </motion.div>
+            >
+              <span className="text-gray-600 text-sm dark:text-white whitespace-nowrap">
+                Hello, <b>{displayName}</b>
+              </span>
+
+              <motion.img
+                whileHover={{ rotate: 5 }}
+                src={`https://ui-avatars.com/api/?name=${displayName}&background=00b074&color=fff&bold=true`}
+                className="
+                  w-9 h-9
+                  rounded-full
+                  object-cover
+                  ring-2 ring-hijau ring-offset-1
+                "
+                alt="profile"
+                onError={(e) => {
+                  e.target.src = `https://avatar.iran.liara.run/public/${Math.floor(Math.random() * 100)}`;
+                }}
+              />
+            </motion.div>
+
+            <AnimatePresence>
+              {openProfile && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute right-0 mt-2 w-48 bg-white shadow-2xl rounded-2xl p-2 z-50 border border-gray-100"
+                >
+                  <div className="px-3 py-2 border-b border-gray-100 mb-1">
+                    <p className="text-sm font-semibold text-gray-800 truncate">{displayName}</p>
+                    <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+                  </div>
+                  <motion.button
+                    whileHover={{ x: 4 }}
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                  >
+                    <FaSignOutAlt />
+                    Logout
+                  </motion.button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </motion.div>
 

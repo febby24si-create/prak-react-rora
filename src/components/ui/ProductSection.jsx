@@ -12,7 +12,7 @@
  *  emptyText: string
  */
 
-import ProductCard from "../ProductCard";
+import ProductCard from "./ProductCard";
 
 const colsClass = {
   2: "grid-cols-1 sm:grid-cols-2",

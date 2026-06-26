@@ -7,13 +7,25 @@ import {
   MdErrorOutline,
   MdWarning,
   MdWidgets,
+  MdPerson,
+  MdAssignment,
 } from "react-icons/md";
+import { useAuth } from "../contexts/AuthContext";
 
-const menuItems = [
+const adminItems = [
   { icon: MdDashboard, label: "Dashboard", path: "/" },
   { icon: MdInventory, label: "Products", path: "/products" },
   { icon: MdShoppingCart, label: "Order List", path: "/orders" },
   { icon: MdPeople, label: "Customers", path: "/customers" },
+];
+
+const memberItems = [
+  { icon: MdPerson, label: "My Dashboard", path: "/member" },
+  { icon: MdInventory, label: "Products", path: "/products" },
+  { icon: MdAssignment, label: "My Orders", path: "/orders" },
+];
+
+const commonItems = [
   { icon: MdWidgets, label: "Fitur XYZ", path: "/fitur-xyz" },
   { icon: MdWidgets, label: "Notes", path: "/notes" },
   { icon: MdWidgets, label: "Components", path: "/components" },
@@ -23,12 +35,17 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
+  const { isAdmin, isMember } = useAuth();
+
   const menuClass = ({ isActive }) =>
     `flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl mb-0.5 text-[13px] font-medium transition-all duration-150 border-l-[3px] ${
       isActive
         ? "bg-green-50 text-hijau font-bold border-hijau"
         : "text-gray-500 hover:bg-gray-50 hover:text-gray-700 border-transparent"
     }`;
+
+  const items = isAdmin ? adminItems : isMember ? memberItems : [];
+  const avatarLabel = isAdmin ? "A" : "M";
 
   return (
     <aside className="flex flex-col min-h-screen w-[240px] bg-white shadow-[2px_0_16px_rgba(0,0,0,0.04)] flex-shrink-0 z-10">
@@ -43,7 +60,7 @@ export default function Sidebar() {
           </span>
         </div>
         <p className="text-[11px] text-gray-400 mt-0.5 font-medium tracking-wide">
-          Modern Admin Dashboard
+          {isAdmin ? "Admin Dashboard" : "Member Area"}
         </p>
       </div>
 
@@ -51,9 +68,9 @@ export default function Sidebar() {
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
         {/* Main Menu */}
         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mb-2">
-          Main Menu
+          {isAdmin ? "Main Menu" : "Member Menu"}
         </p>
-        {menuItems.slice(0, 4).map(({ icon: Icon, label, path }) => (
+        {items.map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
             {label}
@@ -64,7 +81,7 @@ export default function Sidebar() {
         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">
           Learning
         </p>
-        {menuItems.slice(4, 5).map(({ icon: Icon, label, path }) => (
+        {commonItems.slice(0, 1).map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
             {label}
@@ -74,11 +91,11 @@ export default function Sidebar() {
           </NavLink>
         ))}
 
-        {/* Error Pages */}
+        {/* Other Pages */}
         <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest px-3 mt-4 mb-2">
-          Error Pages
+          Other
         </p>
-        {menuItems.slice(5).map(({ icon: Icon, label, path }) => (
+        {commonItems.slice(1).map(({ icon: Icon, label, path }) => (
           <NavLink key={label} to={path} className={menuClass}>
             <Icon className="text-[17px] flex-shrink-0" />
             {label}
@@ -102,11 +119,9 @@ export default function Sidebar() {
               </span>
             </div>
           </div>
-          <img
-            src="https://avatar.iran.liara.run/public/28"
-            className="w-[52px] h-[52px] rounded-full flex-shrink-0"
-            alt="avatar"
-          />
+          <div className="w-[52px] h-[52px] rounded-full flex-shrink-0 bg-white/95 text-hijau font-black flex items-center justify-center ring-2 ring-white/40">
+            {avatarLabel}
+          </div>
         </div>
         <p className="text-[10px] text-gray-400 text-center mt-3 leading-relaxed">
           Sedap Restaurant Admin Dashboard

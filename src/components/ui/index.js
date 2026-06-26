@@ -1,6 +1,6 @@
 // Basic Components
-export { default as Button }        from "./Button";
-export { default as Badge }         from "./Badge";
+export { Button }                  from "./Button";
+export { Badge }                   from "./Badge";
 export { default as Avatar }        from "./Avatar";
 
 // Layout Components
@@ -31,6 +31,7 @@ export { default as Modal }         from "./Modal";
 export { default as LoadingSpinner }from "./LoadingSpinner";
 
 // Section Components
+export { default as CardStat }      from "./CardStat";
 export { default as HeroSection }   from "./HeroSection";
 export { default as FeatureSection }from "./FeatureSection";
 export { default as ProductSection }from "./ProductSection";

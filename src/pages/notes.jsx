@@ -17,6 +17,20 @@ const Notes = () => {
     status: "",
   });
   const [notes, setNotes] = useState([]);
+  const loadNotes = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const data = await notesAPI.fetchNotes();
+      setNotes(data);
+    } catch (err) {
+      setError("Gagal memuat catatan");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handle perubahan nilai input form
   const handleChange = (evt) => {
     const { name, value } = evt.target;
@@ -76,20 +90,7 @@ const Notes = () => {
   useEffect(() => {
     loadNotes();
   }, []);
-  // Memanggil fetchNotes beserta error/loading handling
-  const loadNotes = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const data = await notesAPI.fetchNotes();
-      setNotes(data);
-    } catch (err) {
-      setError("Gagal memuat catatan");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="mb-6">
